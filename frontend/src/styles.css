@@ -1,0 +1,312 @@
+:root {
+  color: #172026;
+  background: #eef3f6;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+.file-button {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #cbd6dd;
+  border-radius: 6px;
+  color: #172026;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 12px;
+}
+
+button.primary {
+  background: #176a73;
+  border-color: #176a73;
+  color: #ffffff;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #20313a;
+  color: #f7fafc;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 18px;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+
+.brand span {
+  color: #b7c7d0;
+  display: block;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.sidebar nav {
+  display: grid;
+  gap: 8px;
+}
+
+.sidebar nav button {
+  background: transparent;
+  border-color: transparent;
+  color: #dce7ec;
+  justify-content: flex-start;
+}
+
+.sidebar nav button.active,
+.sidebar nav button:hover {
+  background: #304651;
+  border-color: #476370;
+}
+
+.sidebar-foot {
+  align-items: center;
+  color: #b7c7d0;
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  font-size: 13px;
+}
+
+main {
+  min-width: 0;
+}
+
+.page {
+  padding: 28px;
+}
+
+.page-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+h2 {
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+p {
+  color: #586870;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #d5e0e6;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.run-grid,
+.sim-grid,
+.resource-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.1fr);
+  margin-bottom: 18px;
+}
+
+label {
+  color: #34454e;
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+input,
+select {
+  border: 1px solid #cbd6dd;
+  border-radius: 6px;
+  min-height: 38px;
+  padding: 8px 10px;
+}
+
+.file-button input {
+  display: none;
+}
+
+.log,
+.snippet {
+  background: #101820;
+  border-radius: 6px;
+  color: #d7e3ea;
+  min-height: 250px;
+  overflow: auto;
+  padding: 12px;
+  white-space: pre-wrap;
+}
+
+.table {
+  display: grid;
+  gap: 8px;
+}
+
+.table-row {
+  align-items: center;
+  border-bottom: 1px solid #e5edf1;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 180px 110px minmax(200px, 1fr) auto auto;
+  padding: 8px 0;
+}
+
+.table-row a {
+  align-items: center;
+  color: #176a73;
+  display: inline-flex;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.timeline {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr auto minmax(180px, auto);
+  margin-bottom: 18px;
+}
+
+.sim-panel {
+  min-height: 480px;
+}
+
+.deck2d,
+.deck3d {
+  background: #f7fafc;
+  border: 1px solid #d5e0e6;
+  border-radius: 6px;
+  height: 420px;
+  width: 100%;
+}
+
+.deck-base {
+  fill: #e2ebf1;
+}
+
+.resource {
+  fill: #7792a3;
+  opacity: 0.72;
+  stroke: #314650;
+  stroke-width: 0.7;
+}
+
+.resource.well,
+.resource.tip_spot {
+  fill: #5ba9b8;
+}
+
+.deck2d text {
+  fill: #10222b;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.target-line {
+  stroke: #d42620;
+  stroke-width: 2;
+}
+
+.target-dot {
+  fill: #d42620;
+}
+
+.empty-state {
+  align-items: center;
+  background: #ffffff;
+  border: 1px dashed #b7c7d0;
+  border-radius: 8px;
+  color: #586870;
+  display: flex;
+  min-height: 420px;
+  justify-content: center;
+}
+
+.search {
+  align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.catalog-list {
+  display: grid;
+  gap: 10px;
+  max-height: 620px;
+  overflow: auto;
+}
+
+.catalog-item {
+  border-bottom: 1px solid #e5edf1;
+  display: grid;
+  gap: 4px;
+  padding-bottom: 9px;
+}
+
+.catalog-item code,
+.catalog-item span {
+  color: #586870;
+  font-size: 12px;
+}
+
+.error {
+  color: #9f241e;
+  margin-top: 12px;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    min-height: auto;
+  }
+
+  .run-grid,
+  .sim-grid,
+  .resource-grid,
+  .table-row {
+    grid-template-columns: 1fr;
+  }
+}
+
