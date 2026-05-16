@@ -38,6 +38,9 @@ def list_resource_factories(limit: int = 300) -> list[ResourceFactory]:
 
 
 def create_custom_resource(request: CustomResourceRequest) -> CustomResourceResponse:
+  rows = request.rows or 8
+  columns = request.columns or 12
+  well_volume = request.well_volume or 200
   data: dict[str, Any] = {
     "kind": request.kind,
     "name": request.name,
@@ -55,10 +58,15 @@ def create_custom_resource(request: CustomResourceRequest) -> CustomResourceResp
       f"resource = Container({request.name!r}, size_x={request.size_x}, "
       f"size_y={request.size_y}, size_z={request.size_z}, category='custom_container')\n"
     )
-  else:
-    rows = request.rows or 8
-    columns = request.columns or 12
-    well_volume = request.well_volume or 200
+  elif request.kind == "well":
+    data.update({"well_volume": well_volume})
+    python = (
+      "from pylabrobot.resources import CrossSectionType, Well, WellBottomType\n\n"
+      f"resource = Well({request.name!r}, size_x={request.size_x}, "
+      f"size_y={request.size_y}, size_z={request.size_z}, max_volume={well_volume}, "
+      "cross_section_type=CrossSectionType.CIRCLE, bottom_type=WellBottomType.FLAT)\n"
+    )
+  elif request.kind == "plate":
     data.update({"rows": rows, "columns": columns, "well_volume": well_volume})
     python = (
       "from pylabrobot.resources import Plate, Well, create_ordered_items_2d\n"
@@ -70,5 +78,42 @@ def create_custom_resource(request: CustomResourceRequest) -> CustomResourceResp
       f"resource = Plate({request.name!r}, size_x={request.size_x}, "
       f"size_y={request.size_y}, size_z={request.size_z}, items=items)\n"
     )
+  elif request.kind == "tip_rack":
+    data.update({"rows": rows, "columns": columns, "well_volume": well_volume})
+    python = (
+      "from pylabrobot.resources import TipRack, TipSpot, create_ordered_items_2d\n"
+      "from pylabrobot.resources.tip import Tip\n\n"
+      "def make_tip(name: str) -> Tip:\n"
+      f"  return Tip(name=name, has_filter=False, total_tip_length={request.size_z * 2}, "
+      f"maximal_volume={well_volume}, fitting_depth=8)\n\n"
+      f"items = create_ordered_items_2d(TipSpot, num_items_x={columns}, num_items_y={rows}, "
+      "dx=9, dy=9, dz=1, item_dx=9, item_dy=9, size_x=6.8, size_y=6.8, "
+      "size_z=0, make_tip=make_tip)\n"
+      f"resource = TipRack({request.name!r}, size_x={request.size_x}, "
+      f"size_y={request.size_y}, size_z={request.size_z}, ordered_items=items)\n"
+    )
+  elif request.kind == "carrier":
+    site_count = max(1, columns)
+    data.update({"sites": site_count})
+    python = (
+      "from pylabrobot.resources import Carrier, Coordinate\n"
+      "from pylabrobot.resources.resource_holder import ResourceHolder\n\n"
+      "site_width = 127.76\n"
+      "site_pitch = 135.0\n"
+      "sites = {\n"
+      f"  index: ResourceHolder(f'site_{{index + 1}}', size_x=site_width, size_y={request.size_y}, "
+      "size_z=5, child_location=Coordinate.zero())\n"
+      f"  for index in range({site_count})\n"
+      "}\n"
+      "for index, site in sites.items():\n"
+      "  site.location = Coordinate(index * site_pitch, 0, 0)\n"
+      f"resource = Carrier({request.name!r}, size_x={request.size_x}, "
+      f"size_y={request.size_y}, size_z={request.size_z}, sites=sites)\n"
+    )
+  else:
+    python = (
+      "from pylabrobot.resources import Deck\n\n"
+      f"resource = Deck(name={request.name!r}, size_x={request.size_x}, "
+      f"size_y={request.size_y}, size_z={request.size_z})\n"
+    )
   return CustomResourceResponse(python=python, json_definition=data)
-

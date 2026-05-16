@@ -2,6 +2,7 @@ import type { CompactResource, TraceEvent } from "../../types";
 
 export function Deck2D({ resources, event }: { resources: Record<string, CompactResource>; event?: TraceEvent }) {
   const entries = Object.entries(resources).filter(([, resource]) => resource.absolute_location && resource.size);
+  const activeResources = new Set((event?.channels ?? []).map((channel) => channel.resource));
   const bounds = entries.reduce(
     (acc, [, resource]) => {
       const location = resource.absolute_location ?? [0, 0, 0];
@@ -21,6 +22,7 @@ export function Deck2D({ resources, event }: { resources: Record<string, Compact
       {entries.map(([name, resource]) => {
         const location = resource.absolute_location ?? [0, 0, 0];
         const size = resource.size;
+        const isChild = resource.category === "well" || resource.category === "tip_spot";
         return (
           <g key={name}>
             <rect
@@ -28,9 +30,9 @@ export function Deck2D({ resources, event }: { resources: Record<string, Compact
               y={bounds.maxY - location[1] - size[1]}
               width={Math.max(1, size[0])}
               height={Math.max(1, size[1])}
-              className={`resource ${resource.category ?? ""}`}
+              className={`resource ${resource.category ?? ""} ${activeResources.has(name) ? "active" : ""}`}
             />
-            {size[0] > 20 && size[1] > 12 && (
+            {!isChild && size[0] > 35 && size[1] > 18 && (
               <text x={location[0] + 4} y={bounds.maxY - location[1] - size[1] + 13}>
                 {name}
               </text>
@@ -59,4 +61,3 @@ function targetPoint(event?: TraceEvent): { x: number; y: number } | null {
   if (channel?.target) return { x: channel.target[0], y: channel.target[1] };
   return null;
 }
-

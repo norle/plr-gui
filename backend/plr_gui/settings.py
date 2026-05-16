@@ -18,7 +18,8 @@ def data_dir() -> Path:
 
 
 def config_dir() -> Path:
-  path = Path(user_config_dir(APP_NAME, APP_AUTHOR))
+  override = os.environ.get("PLR_GUI_CONFIG_DIR")
+  path = Path(override) if override else Path(user_config_dir(APP_NAME, APP_AUTHOR))
   path.mkdir(parents=True, exist_ok=True)
   return path
 
@@ -33,4 +34,3 @@ def runs_dir() -> Path:
   path = data_dir() / "runs"
   path.mkdir(parents=True, exist_ok=True)
   return path
-

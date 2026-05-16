@@ -49,11 +49,16 @@ export type RunSummary = {
   status: string;
   script_path: string;
   created_at: string;
+  workspace_id?: string | null;
+  script_relative_path?: string | null;
   started_at?: string | null;
   finished_at?: string | null;
   return_code?: number | null;
   report_path?: string | null;
   trace_path?: string | null;
+  manifest_path?: string | null;
+  source_snapshot_path?: string | null;
+  duration_seconds?: number | null;
 };
 
 export type ResourceFactory = {
@@ -63,3 +68,33 @@ export type ResourceFactory = {
   doc?: string | null;
 };
 
+export type WorkspaceSummary = {
+  id: string;
+  name: string;
+  path: string;
+  last_opened_at: string;
+};
+
+export type WorkspaceFile = {
+  path: string;
+  name: string;
+  size: number;
+  modified_at: string;
+};
+
+export type WorkspaceFileContent = {
+  path: string;
+  content: string;
+  modified_at: string;
+};
+
+export type LaunchProfile = {
+  id: string;
+  name: string;
+  script_relative_path: string;
+  working_directory?: string | null;
+  python_executable?: string | null;
+  args: string[];
+  env: Record<string, string>;
+  updated_at: string;
+};
